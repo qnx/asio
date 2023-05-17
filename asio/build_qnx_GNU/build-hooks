@@ -1,0 +1,82 @@
+#!/bin/sh
+function hook_preconfigure {
+#
+#
+#
+#	CXXFLAGS="$CXXFLAGS -DASIO_HAS_PTHREADS -DASIO_DYN_LINK"
+# -DQNX  is used to splve the incompatibility issue of macros CMSG_SPACE() which is actually call some function.
+#        For the tests "fd_passing_stream_server" and "fd_passing_stream_client" it has to be pure pre-compile macros.
+#        Unclear resons why in QNX it is combination of two external calls: 
+#		int	__cmsg_alignbytes(void);
+
+	CXXFLAGS="$CXXFLAGS -DASIO_HAS_PTHREADS -DASIO_HAS_STD_STRING_VIEW -DASIO_HAS_CONSTEXPR -DASIO_HAS_STD_FUTURE_CLASS -DQNX"
+
+#	CPPFLAGS="$CPPFLAGS -DASIO_HAS_STD_FUTURE"
+
+	LDFLAGS="$LDFLAGS -lsocket"
+
+
+#
+#	Distributiv dirrectory
+#
+	DIST_BASE="${PWD}/../.."
+#
+#	configure_opts="${configure_opts} --srcdir=${DIST_BASE}/src"
+#
+	configure_opts="--includedir=${DIST_BASE}/include"
+	echo "configure_opts = $configure_opts"
+	echo "      CXXFLAGS = $CXXFLAGS"
+	echo "      CPPFLAGS = $CPPFLAGS"
+	echo "       LDFLAGS = $LDFLAGS"
+}
+
+function hook_configure {
+    if [ -z "${ac_version}" ]; then
+        unset _guess
+        _pat='/[Gg]enerated.*[Aa]utoconf/s/.*\([1-9]\.[0-9][0-9]*\).*/\1/p'
+        [ "${_guess}" ] || _guess=$(../../configure --version | sed -n -e "${_pat}")
+        [ "${_guess}" ] || _guess=$(sed -n -e "1,10{
+            ${_pat}
+        }" <../../configure)
+        AutoconfVersion ${_guess}
+    fi
+    ../../configure \
+        ${ac_host:+"--host=${ac_host}"} \
+        ${ac_build:+"--build=${ac_build}"} \
+        ${configure_opts} \
+        ${ac_params:+${CC:+"CC=${CC}"}} \
+        ${ac_params:+${CFLAGS:+"CFLAGS=-O2 ${CFLAGS}"}} \
+        ${ac_params:+${CPPFLAGS:+"CPPFLAGS=${CPPFLAGS}"}} \
+        ${ac_params:+${LDFLAGS:+"LDFLAGS=${LDFLAGS}"}} \
+        ${ac_params:+${CXX:+"CXX=${CXX}"}} \
+        ${ac_params:+${CXXFLAGS:+"CXXFLAGS=-O2 ${CXXFLAGS}"}} \
+        ${ac_params:+${ac_autotools:+${ac_autotools}}} \
+        || Error "configure failed";
+}
+
+function hook_make {
+#	if [ "${make_cmds}" == "check-TESTS" ] && [ "${TARGET_SYSNAME}" == "nto" ]; then
+#		echo Skip check tests execution
+#		return;
+#	fi
+	echo " ======      make_CC=${make_CC}"
+	echo " ======   make_defns=${make_defns}"
+	echo " ====== ac_autotools=${ac_autotools}"
+	echo " ======    make_opts=${make_opts}"
+	echo " ======    make_cmds=${make_cmds}"
+	echo " ======        TESTS=${TESTS}"
+#	if [ "${make_cmds}" == "check" ] ; then
+#	        ${make_cmds}=""
+#		echo "===== Skip check tests execution CMD=${make_cmds} ====="
+#	fi
+
+	FixMakeEnvironment
+	make -fMakefile \
+		${make_CC:+"CC=${make_CC}"} \
+		${make_defns} \
+		${ac_autotools} \
+		${make_opts} \
+		${make_cmds} \
+		${JLEVEL:+"-j${JLEVEL}"} \
+		|| exit;
+}
