@@ -23,6 +23,15 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
+#if defined(ASIO_QNX)
+   #undef CMSG_ALIGN
+   #define CMSG_ALIGN(len) (((len) + sizeof (size_t) - 1) & (size_t) ~(sizeof (size_t) - 1))
+
+   #undef CMSG_SPACE
+   #define CMSG_SPACE(len) (CMSG_ALIGN (len) + CMSG_ALIGN (sizeof (struct cmsghdr)))
+#endif //defined(ASIO_QNX)
+
+
 using asio::local::stream_protocol;
 
 constexpr std::size_t max_length = 1024;

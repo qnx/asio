@@ -1,35 +1,36 @@
 #!/bin/sh
+
+#
+#	Setup of essential configuration parameters
+#
 function hook_preconfigure {
 #
-#
-#
-#	CXXFLAGS="$CXXFLAGS -DASIO_HAS_PTHREADS -DASIO_DYN_LINK"
-# -DQNX  is used to splve the incompatibility issue of macros CMSG_SPACE() which is actually call some function.
+# -DASIO_QNX  is used to solve the incompatibility issue of macros CMSG_SPACE() which is actually calls function __cmsg_alignbytes().
 #        For the tests "fd_passing_stream_server" and "fd_passing_stream_client" it has to be pure pre-compile macros.
-#        Unclear resons why in QNX it is combination of two external calls: 
-#		int	__cmsg_alignbytes(void);
+#
+	CXXFLAGS="$CXXFLAGS -DASIO_HAS_PTHREADS -DASIO_HAS_STD_STRING_VIEW -DASIO_HAS_CONSTEXPR -DASIO_HAS_STD_FUTURE_CLASS -DASIO_QNX"
 
-	CXXFLAGS="$CXXFLAGS -DASIO_HAS_PTHREADS -DASIO_HAS_STD_STRING_VIEW -DASIO_HAS_CONSTEXPR -DASIO_HAS_STD_FUTURE_CLASS -DQNX"
-
-#	CPPFLAGS="$CPPFLAGS -DASIO_HAS_STD_FUTURE"
-
+#
+#	Add socket library
+#
 	LDFLAGS="$LDFLAGS -lsocket"
 
-
 #
-#	Distributiv dirrectory
+#	Distributive directory
 #
 	DIST_BASE="${PWD}/../.."
+
 #
-#	configure_opts="${configure_opts} --srcdir=${DIST_BASE}/src"
+#	Setup correct pathes for install and build make commands
 #
-	configure_opts="--includedir=${DIST_BASE}/include"
-	echo "configure_opts = $configure_opts"
-	echo "      CXXFLAGS = $CXXFLAGS"
-	echo "      CPPFLAGS = $CPPFLAGS"
-	echo "       LDFLAGS = $LDFLAGS"
+	configure_opts="--srcdir=${DIST_BASE}"
+	configure_opts="${configure_opts} --prefix=${INSTALL_ROOT_nto}/usr"
+	configure_opts="${configure_opts} --exec-prefix=${INSTALL_ROOT_nto}/${cpudir}/usr"
 }
 
+#
+#	Adjust relative path to ./configure tool
+#
 function hook_configure {
     if [ -z "${ac_version}" ]; then
         unset _guess
@@ -54,29 +55,10 @@ function hook_configure {
         || Error "configure failed";
 }
 
-function hook_make {
-#	if [ "${make_cmds}" == "check-TESTS" ] && [ "${TARGET_SYSNAME}" == "nto" ]; then
-#		echo Skip check tests execution
-#		return;
-#	fi
-	echo " ======      make_CC=${make_CC}"
-	echo " ======   make_defns=${make_defns}"
-	echo " ====== ac_autotools=${ac_autotools}"
-	echo " ======    make_opts=${make_opts}"
-	echo " ======    make_cmds=${make_cmds}"
-	echo " ======        TESTS=${TESTS}"
-#	if [ "${make_cmds}" == "check" ] ; then
-#	        ${make_cmds}=""
-#		echo "===== Skip check tests execution CMD=${make_cmds} ====="
-#	fi
-
-	FixMakeEnvironment
-	make -fMakefile \
-		${make_CC:+"CC=${make_CC}"} \
-		${make_defns} \
-		${ac_autotools} \
-		${make_opts} \
-		${make_cmds} \
-		${JLEVEL:+"-j${JLEVEL}"} \
-		|| exit;
+function hook_premake {
+	if [ "${make_cmds}" == "check" ] && [ "${TARGET_SYSNAME}" == "nto" ]; then
+		echo For target nto suppress tests execution.
+		echo All tests have to be run on target system.
+		make_opts="${make_opts} TESTS=''"
+	fi
 }
