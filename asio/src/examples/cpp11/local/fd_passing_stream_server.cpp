@@ -22,13 +22,13 @@
 
 #if defined(ASIO_HAS_LOCAL_SOCKETS)
 
-#if defined(ASIO_QNX)
+#if defined(__QNXNTO__)
    #undef CMSG_ALIGN
    #define CMSG_ALIGN(len) (((len) + sizeof (size_t) - 1) & (size_t) ~(sizeof (size_t) - 1))
 
    #undef CMSG_SPACE
    #define CMSG_SPACE(len) (CMSG_ALIGN (len) + CMSG_ALIGN (sizeof (struct cmsghdr)))
-#endif //defined(ASIO_QNX)
+#endif //defined(__QNXNTO__)
 
 
 using asio::local::stream_protocol;

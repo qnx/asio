@@ -146,17 +146,20 @@ void test()
 #if (defined(__MACH__) && defined(__APPLE__)) \
   || defined(__FreeBSD__) \
   || defined(__NetBSD__) \
-  || defined(__OpenBSD__)
+  || defined(__OpenBSD__) \
+  || defined(__QNXNTO__)
   const ip::address multicast_address_v6 = ip::make_address("ff02::1%lo0", ec);
 #else // (defined(__MACH__) && defined(__APPLE__))
       //   || defined(__FreeBSD__)
       //   || defined(__NetBSD__)
       //   || defined(__OpenBSD__)
+      //   || defined(__QNXNTO__)
   const ip::address multicast_address_v6 = ip::make_address("ff01::1", ec);
 #endif // (defined(__MACH__) && defined(__APPLE__))
        //   || defined(__FreeBSD__)
        //   || defined(__NetBSD__)
        //   || defined(__OpenBSD__)
+       //   || defined(__QNXNTO__)
   ASIO_CHECK(!have_v6 || !ec);
 
   // join_group class.
