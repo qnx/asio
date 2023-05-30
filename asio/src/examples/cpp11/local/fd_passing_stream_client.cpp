@@ -31,7 +31,6 @@
    #define CMSG_SPACE(len) (CMSG_ALIGN (len) + CMSG_ALIGN (sizeof (struct cmsghdr)))
 #endif //defined(__QNXNTO__)
 
-
 using asio::local::stream_protocol;
 
 constexpr std::size_t max_length = 1024;

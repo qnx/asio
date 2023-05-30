@@ -30,9 +30,7 @@
    #define CMSG_SPACE(len) (CMSG_ALIGN (len) + CMSG_ALIGN (sizeof (struct cmsghdr)))
 #endif //defined(__QNXNTO__)
 
-
 using asio::local::stream_protocol;
-
 
 class session
   : public std::enable_shared_from_this<session>

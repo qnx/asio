@@ -75,7 +75,19 @@ function hook_postmake {
 	base_script="run_testsuites.sh"
 	testsuite_log="test-suite.log"
 	testsuite_script=$base_testsuite/$base_script
+	testsuite_sdp_bin=${INSTALL_ROOT_nto}/${cpudir}/usr/bin/asio_tests
 
+	#
+	# uninstall all asio test from SDP
+	#
+	if [ "${make_cmds}" == "uninstall" ] && [ -d ${testsuite_sdp_bin} ]; then
+		echo "we have to uninstall all asio tests"
+		(set -x; rm -rf ${testsuite_sdp_bin})
+	fi
+
+	#
+	# build and install all asio tests
+	#
 	if [ "${make_cmds}" == "check" ] && [ "${TARGET_SYSNAME}" == "nto" ] && [ "${SYSNAME}" == "linux" ]; then
 		if [ -d ${base_testsuite} ]; then
 
@@ -84,8 +96,8 @@ function hook_postmake {
 			echo "${blu}=========================================================================${cls}"
 
 			echo "Remove old testsuite script ..."
-			echo "rm -f $testsuite_script"
-			rm -f "$testsuite_script"
+			#(set -x; <command> - print each command before executing )
+			(set -x; rm -f "$testsuite_script")
 						
 			echo "Looking for tests executables..."
 			testsuite_list=$(find . -type f -executable | sed -n "s/^\.\/src\/tests\/\(\S*\)$/\1/p")
@@ -115,6 +127,13 @@ function hook_postmake {
 				echo "echo \"### Testsuite:$v ###\" >> $testsuite_log" >> $testsuite_script || Error "Unexpected error during $testsuite_script update by testsuite:'$v'";
 				echo "echo \"\${result}\" >> $testsuite_log"           >> $testsuite_script || Error "Unexpected error during $testsuite_script update by testsuite:'$v'";
 				echo "${blu}ADDED${cls}:$v";
+				#
+				# install testsuite into SDP
+				#
+				_dest_folder="${testsuite_sdp_bin}/$(dirname $v)"
+				_source_test="src/tests/$v"
+				[ -d "${_dest_folder}" ] || (set -x; mkdir -p ${_dest_folder})
+				(set -x; cp -f $_source_test $_dest_folder)
 			done
 			
 			echo "echo \"${grn}=========================================================================${cls}\"" >> $testsuite_script || Error "Unexpected error during $testsuite_script update";
@@ -131,7 +150,12 @@ function hook_postmake {
 		
 			chmod +x $testsuite_script
 
+			#(set -x; <command> - print each command before executing )
+			(set -x; cp -f $testsuite_script $testsuite_sdp_bin)
+
 			echo "${blu}For asio ${pkg_str} total ${testsuite_number} testsuites were added into script:${testsuite_script}${cls}";
+			echo "${blu}All testsuites were installed into '${testsuite_sdp_bin}'${cls}";
+			echo "${blu}To run all tests please copy '${testsuite_sdp_bin}' to the target system and run test script '${testsuite_script}'${cls}";
 		else
 			echo "${red}Error - base testsuite:'${base_build}/${base_testsuite}' for asio ${pkg_str} was not found!${cls}";
 			exit 1;
