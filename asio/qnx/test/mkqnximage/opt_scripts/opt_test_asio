@@ -15,7 +15,7 @@ function help()
     on the target under /data/asio from which you can execute the asio test suite using:
 
     cd /data/asio/
-    ./qnxtest.sh
+    ./run_testsuites.sh
 
     NOTE: You must compile the asio source tree of the desired target before building
     the vm image.
