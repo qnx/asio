@@ -2,13 +2,14 @@
 
 **NOTE**: QNX ports are only supported from a **Linux host** operating system
 
-### Install automake/autoconf tools
+### Install dependencies
 
 `sudo apt install automake`
+`sudo apt install pkg-config`
 
-### Clone repository
+### Switch to asio main folder
 
-`git clone git@gitlab.com:qnx/libs/asio.git && cd asio/asio`
+`cd asio`
 	
 ### Generate GNU build tool ./configure and all needed Makefiles
 
