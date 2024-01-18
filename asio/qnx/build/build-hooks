@@ -10,7 +10,7 @@ NESTED_LEVEL="../../.."
 #
 function hook_preconfigure {
 #
-# QNXNTO specific changes are covered by prediefined '__QNXNTO__'
+# QNX specific changes are covered by prediefined '__QNX__'
 #       For examples: "fd_passing_stream_server" and "fd_passing_stream_client"
 #       For the testsuites:  unit/ip/multicast 
 #

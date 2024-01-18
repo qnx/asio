@@ -115,6 +115,9 @@ PERFORMANCE_TEST_EXES = \
 	tests\performance\server.exe
 
 UNIT_TEST_EXES = \
+	tests\unit\any_completion_executor.exe \
+	tests\unit\any_completion_handler.exe \
+	tests\unit\any_io_executor.exe \
 	tests\unit\append.exe \
 	tests\unit\as_tuple.exe \
 	tests\unit\associated_allocator.exe \
@@ -142,6 +145,7 @@ UNIT_TEST_EXES = \
 	tests\unit\bind_allocator.exe \
 	tests\unit\bind_cancellation_slot.exe \
 	tests\unit\bind_executor.exe \
+	tests\unit\bind_immediate_executor.exe \
 	tests\unit\buffered_read_stream.exe \
 	tests\unit\buffered_stream.exe \
 	tests\unit\buffered_write_stream.exe \
@@ -167,27 +171,13 @@ UNIT_TEST_EXES = \
 	tests\unit\execution\any_executor.exe \
 	tests\unit\execution\blocking.exe \
 	tests\unit\execution\blocking_adaptation.exe \
-	tests\unit\execution\bulk_execute.exe \
-	tests\unit\execution\bulk_guarantee.exe \
-	tests\unit\execution\connect.exe \
 	tests\unit\execution\context_as.exe \
-	tests\unit\execution\execute.exe \
 	tests\unit\execution\executor.exe \
 	tests\unit\execution\invocable_archetype.exe \
 	tests\unit\execution\mapping.exe \
-	tests\unit\execution\operation_state.exe \
 	tests\unit\execution\outstanding_work.exe \
 	tests\unit\execution\prefer_only.exe \
-	tests\unit\execution\receiver.exe \
 	tests\unit\execution\relationship.exe \
-	tests\unit\execution\schedule.exe \
-	tests\unit\execution\scheduler.exe \
-	tests\unit\execution\sender.exe \
-	tests\unit\execution\set_done.exe \
-	tests\unit\execution\set_error.exe \
-	tests\unit\execution\set_value.exe \
-	tests\unit\execution\start.exe \
-	tests\unit\execution\submit.exe \
 	tests\unit\executor.exe \
 	tests\unit\executor_work_guard.exe \
 	tests\unit\file_base.exe \
@@ -242,6 +232,7 @@ UNIT_TEST_EXES = \
 	tests\unit\serial_port.exe \
 	tests\unit\serial_port_base.exe \
 	tests\unit\signal_set.exe \
+	tests\unit\signal_set_base.exe \
 	tests\unit\socket_base.exe \
 	tests\unit\static_thread_pool.exe \
 	tests\unit\steady_timer.exe \

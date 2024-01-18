@@ -47,13 +47,13 @@ asio lib normally wants to be tested on the same machine it was built on. This o
 
 `=========================================================================`
 
-`Testsuite summary for asio 1.26.0`
+`Testsuite summary for asio 1.29.0`
 
 `=========================================================================`
 
-`# TOTAL: 353`
+`# TOTAL: 346`
 
-`# PASS: 353`
+`# PASS: 346`
 
 `# FAIL: 0`
 

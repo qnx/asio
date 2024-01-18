@@ -2,7 +2,7 @@
 // fd_passing_stream_server.cpp
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2022 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2023 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 // Copyright (c) 2021 Heiko Hund (heiko at openvpn dot net)
 // Copyright (c) 2023, BlackBerry Limited. All Rights Reserved.
 //
