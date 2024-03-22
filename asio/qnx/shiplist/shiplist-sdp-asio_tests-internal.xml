@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shiplist>
 	<id>com.qnx.${baselineId}.osr.asio_tests.internal</id>
-	<name>Asio 1.26.0 Library Tests</name>
+	<name>Asio Library Tests</name>
 	<description>Asio library Tests</description>
 	<property key="f.support" value="Custom"/>
 	<property key="f.swtype" value="III"/>
@@ -14,6 +14,5 @@
 	<requires value="suppress-library: autogen"/>
 	<provides value="suppress-library: autogen"/>
 
-	<asset dest="${targetfolder}/[ARCH:aarch64le,x86_64]/usr/bin/asio_tests/run_testsuites.sh" runtime="false" />
-	<asset dest="${targetfolder}/[ARCH:aarch64le,x86_64]/usr/bin/asio_tests" />
+	<asset dest="${targetfolder}/[ARCH:aarch64le,x86_64]/usr/local/bin/asio_tests/" runtime="false" />
 </shiplist>

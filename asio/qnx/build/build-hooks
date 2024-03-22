@@ -1,9 +1,26 @@
 #!/bin/sh
 
 #
+#    Default basic prefix is /usr/local
+#
+BASIC_PREFIX="/usr/local"
+
+#
 #	QNX specific build configuration nested level
 #
 NESTED_LEVEL="../../.."
+
+#
+#    A prefix path to use on the target.
+#
+PREFIX="${INSTALL_ROOT_nto}/${BASIC_PREFIX}"
+
+#
+#    A prefix path to binary on the target.
+#    bindir	${EXEC_PREFIX}/bin
+#    libdir	${EXEC_PREFIX}/lib
+#
+EXEC_PREFIX="${INSTALL_ROOT_nto}/${cpudir}/${BASIC_PREFIX}"
 
 #
 #	Setup of essential configuration parameters
@@ -30,8 +47,8 @@ function hook_preconfigure {
 #	Setup correct pathes for install and build make commands
 #
 	configure_opts="--srcdir=${DIST_BASE}"
-	configure_opts="${configure_opts} --prefix=${INSTALL_ROOT_nto}/usr"
-	configure_opts="${configure_opts} --exec-prefix=${INSTALL_ROOT_nto}/${cpudir}/usr"
+	configure_opts="${configure_opts} --prefix=${PREFIX}"
+	configure_opts="${configure_opts} --exec-prefix=${EXEC_PREFIX}"
 }
 
 #
@@ -71,7 +88,7 @@ function hook_postmake {
 	base_script="run_testsuites.sh"
 	testsuite_log="test-suite.log"
 	testsuite_script=$base_testsuite/$base_script
-	testsuite_sdp_bin=${INSTALL_ROOT_nto}/${cpudir}/usr/bin/asio_tests
+	testsuite_sdp_bin=${EXEC_PREFIX}/bin/asio_tests
 
 	#
 	# uninstall all asio test from SDP

@@ -24,9 +24,13 @@ asio lib normally wants to be tested on the same machine it was built on. This o
 
 `source <path-to-sdp>/qnxsdp-env.sh`
 
-### Build and install all asio tests into SDP
+### Build and install all asio tests
 
 `JLEVEL=$(nproc) CPULIST=x86_64 make -C qnx/build check`
+
+or
+
+`JLEVEL=$(nproc) CPULIST=x86_64 make -C qnx/build check USE_INSTALL_ROOT=true INSTALL_ROOT_nto=<full-path>`
 
 ### Then build your QNX image using mkqnximage and the following options:
 
@@ -34,27 +38,27 @@ asio lib normally wants to be tested on the same machine it was built on. This o
 
 `mkdir test_image && cd test_image`
 
-`mkqnximage --extra-dirs=$ASIO_ROOT/qnx/test/mkqnximage --clean --run --force --test-asio=$QNX_TARGET/x86_64/usr/bin/asio_tests`
+`mkqnximage --extra-dirs=$ASIO_ROOT/qnx/test/mkqnximage --clean --run --force --test-asio=$QNX_TARGET/x86_64/usr/local/bin/asio_tests`
+
+or
+
+`mkqnximage --extra-dirs=$ASIO_ROOT/qnx/test/mkqnximage --clean --run --force --test-asio=<full-path>/x86_64/usr/local/bin/asio_tests`
 
 ### Once the target has booted, the asio tests will be located in /data/asio:
 
 `cd /data/asio`
-    
+
 `./run_testsuites.sh`
 
 ### Test execution summary
-`...`
 
-`=========================================================================`
-
-`Testsuite summary for asio 1.29.0`
-
-`=========================================================================`
-
-`# TOTAL: 346`
-
-`# PASS: 346`
-
-`# FAIL: 0`
-
-`=========================================================================`
+```
+...
+=========================================================================
+Testsuite summary for asio 1.29.0
+=========================================================================
+# TOTAL: 346
+# PASS: 346
+# FAIL: 0
+=========================================================================
+```
